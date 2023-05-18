@@ -170,4 +170,16 @@ properties `compression=lz4`, `copies=2`, `atime=off` and mount it at
 
 ## ZFS Managing tools
 
+- Add `/sa_data/log/` directory 
+```
+mkdir -p /sa_data/log/
+```
 
+- Add the [`sabtool` script](https://github.com/jason810496/System-Administration/blob/main/hw3/sabktool) by curl
+```
+sudo curl -o /usr/local/bin/sabktool https://raw.githubusercontent.com/jason810496/System-Administration/main/hw3/sabktool
+```
+- add execute permission to `/usr/local/bin/sabktool` script 
+```
+sudo chmod +x /usr/local/bin/sabktool
+```
