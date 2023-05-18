@@ -1,0 +1,54 @@
+#!/usr/local/bin/python3
+
+import os
+import sys
+from subprocess import run
+
+def Help():
+    print("""Usage:
+        create <snapshot-name>
+        remove <snapshot-name> | all
+        list
+        roll <snapshot-name>
+        logrotate""")
+
+def Create(name):
+    payload = f"sudo zfs snapshot sa_pool/data@{name}"
+    os.system(payload)
+
+def Remove(name):
+    payload = f"sudo zfs destroy sa_pool/data@{name}"
+    if name == "all":
+        payload = "sudo zfs list -t snapshot -o name | grep sa_pool/data@ | xargs sudo zfs destroy"
+    os.system(payload)
+
+def List():
+    payload = "sudo zfs list -t snapshot -o name | grep sa_pool/data@"
+    result = run(payload, shell=True, capture_output=True)
+    print(result.stdout.decode('utf-8'))
+
+def Roll(name):
+    payload = f"sudo zfs rollback -r sa_pool/data@{name}"
+    os.system(payload)
+
+def Logrotate():
+    payload = "sudo cp /var/log/fakelog.log /sa_data/log/ && sudo logrotate /etc/logrotate.d/fakelog"
+    os.system(payload)
+
+if __name__ == '__main__':
+    argv = sys.argv
+    argc = len(argv)
+    if argc == 1:
+        Help()
+    elif argc == 2:
+        if argv[1] == "list":
+            List()
+        elif argv[1] == "logrotate":
+            Logrotate()
+    elif argc == 3:
+        if argv[1] == "create":
+            Create(argv[2])
+        elif argv[1] == "remove":
+            Remove(argv[2])
+        elif argv[1] == "roll":
+            Roll(argv[2])
