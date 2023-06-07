@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# PROVIDE: hw4
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# hw4_enable (bool):    Set to "YES" to enable hw4.
+#                             (default: "NO")
+#
+# hw4_interfaces (str): List of interfaces to bring up/down
+#                             on start/stop. (eg: "wg0 wg1")
+#                             (default: "")
+# hw4_env (str):        Environment variables for the userspace
+#                             implementation. (eg: "LOG_LEVEL=debug")
+
+. /etc/rc.subr
+
+name=hw4
+rcvar=hw4_enable
+# extra_commands="reload status"
+
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+# reload_cmd="${name}_reload"
+# status_cmd="${name}_status"
+
+hw4_start()
+{
+    # Add commands to start your web app here
+    sudo 
+}
+
+hw4_stop()
+{
+    # Add commands to stop your web app here
+    sudo 
+}
+
+# hw4_reload()
+# {
+#         
+# }
+
+# hw4_status()
+# {
+#         
+# }
+
+load_rc_config $name
+
+# : ${hw4_enable="NO"}
+# : ${hw4_interfaces=""}
+# : ${hw4_env=""}
+
+run_rc_command "$1"
