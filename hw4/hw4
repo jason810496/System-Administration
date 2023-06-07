@@ -63,7 +63,7 @@ hw4_restart()
 
 load_rc_config $name
 
-# : ${hw4_enable="NO"}
+: ${hw4_enable="YES"}
 # : ${hw4_interfaces=""}
 # : ${hw4_env=""}
 
