@@ -40,10 +40,10 @@ hw4_start()
 hw4_stop()
 {
     # Add commands to stop your web app here
-    if [ -f "/var/run/mywebapp.pid" ]; then
+    if [ -f "/var/run/hw4.pid" ]; then
        kill $(cat /var/run/hw4.pid)
        rm /var/run/hw4.pid
-   fi
+    fi
 }
 
 hw4_restart()
