@@ -34,18 +34,21 @@ hw4_start()
     . venv/bin/activate
     cd api
     python3 -m uvicorn app:APP --reload --host 0.0.0.0 &
-    sudo echo $! > /var/run/hw4.pid
 }
 
 hw4_stop()
 {
     # Add commands to stop your web app here
-    $pid(ps u | grep python | tail -r | tail -n +2 | tail -r | cut -d ' ' -f 2)
-    kill -9 $pid
+    if [ -n "$(ps u | grep python | tail -r | tail -n +2 | tail -r | cut -d ' ' -f 2)" ]; then
+        kill -9 $(ps u | grep python | tail -r | tail -n +2 | tail -r | cut -d ' ' -f 2)
+    fi
 }
 
 hw4_restart()
 {
+    if [ -n "$(ps u | grep python | tail -r | tail -n +2 | tail -r | cut -d ' ' -f 2)" ]; then
+        kill -9 $(ps u | grep python | tail -r | tail -n +2 | tail -r | cut -d ' ' -f 2)
+    fi
     hw4_stop
     hw4_start
 }
