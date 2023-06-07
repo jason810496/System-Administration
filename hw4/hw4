@@ -17,23 +17,32 @@
 
 name=hw4
 rcvar=hw4_enable
+extra_commands="restart"
 # extra_commands="reload status"
 
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
+restart_cmd="${name}_restart"
 # reload_cmd="${name}_reload"
 # status_cmd="${name}_status"
 
 hw4_start()
 {
     # Add commands to start your web app here
-    sudo 
+    cd /home/Jason/System-Administration/hw4/app && sudo make run &
 }
 
 hw4_stop()
 {
     # Add commands to stop your web app here
-    sudo 
+    $pid=$(jobs -l | cut -d ' ' -f2)
+    sudo kill $pid
+}
+
+hw4_restart()
+{
+    hw4_stop
+    hw4_start
 }
 
 # hw4_reload()
