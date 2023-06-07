@@ -1,8 +1,6 @@
 APP = api
 
-.PHONY: clean init
-
-init: clean
+init:
 	python3 -m venv venv
 	source venv/bin/activate
     pip3 install python-dotenv fastapi uvicorn loguru python-multipart pytest pytest-asyncio requests httpx
