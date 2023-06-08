@@ -15,7 +15,7 @@ GET_HEALTH = {
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     responses=GET_HEALTH,
     response_model=schemas.Msg,
