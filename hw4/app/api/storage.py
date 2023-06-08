@@ -89,6 +89,7 @@ class Storage:
         last_pos=0
         cur_pos=block_size+1
         first_block_size=block_size+1
+        block_list=[] # bytes list
         for i in range(raid_block_cnt):
             file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-{i}" / file.filename
             
@@ -99,13 +100,29 @@ class Storage:
                 padding=first_block_size-cur_pos+last_pos
                 final_content=content_decode[last_pos:cur_pos]+padding * '\0'
                 final_content_encode=final_content.encode(encoding='utf-8')
+                block_list.append(final_content_encode)
+
                 logger.info(f"file_path: {file_path}")
                 logger.info(f"file content: { content_decode[last_pos:cur_pos] }")
-                logger.info(f"file encode: { final_content }")
+                logger.info(f"file content+padding: { final_content }")
+                logger.info(f"file encode: { final_content_encode }")
                 f.write( final_content_encode )
                 f.close()
             last_pos=cur_pos
             cur_pos=last_pos+block_size
+
+        # parity block
+        file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-{settings.NUM_DISKS}" / file.filename
+        logger.info(f"parity block file_path: {file_path}")
+        with open(file_path, 'wb') as f:
+            # xor all block from block_list
+            parity_content=block_list[0]
+            for i in range(1, len(block_list)):
+                parity_content=bytes(a ^ b for a, b in zip(parity_content, block_list[i]))
+            
+            logger.info(f"parity block content: { parity_content }")
+            f.write( parity_content )
+            f.close()
         
             
         # response
