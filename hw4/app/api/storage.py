@@ -8,6 +8,7 @@ import schemas
 from config import settings
 from fastapi import UploadFile
 from loguru import logger
+from starlette.exceptions import HTTPException
 
 
 class Storage:
@@ -38,43 +39,117 @@ class Storage:
         and the file is considered to be damaged
         so we need to delete the file
         """
+
+
         return True
 
     async def create_file(self, file: UploadFile) -> schemas.File:
         # TODO: create file with data block and parity block and return it's schema
+        
+        file_path = Path(settings.UPLOAD_PATH) / file.filename
+        content = ""
+        with open(file_path, 'wb') as f:
+            content = await file.read()
+            f.write(content)
+            f.close()
+       
+        # if file already exist, response 409
+        if file_path.is_file():
+            return HTTPException(status_code=409, detail="File already exist")
+        
+        # if file too large, response 413
+        if len(content) > settings.MAX_SIZE:
+            return HTTPException(status_code=413, detail="File too large")
+           
+        import os # for getsize 
 
-        content = "お前はもう死んでいる!!!"
+        file_size=len(content) # before decode
+
+        content_decode=content.decode(encoding='utf-8') # normal string
+        content_encode=content_decode.encode(encoding='utf-8')
+
+        logger.info(f"check file_path {os.path.isfile(file_path)} ")
+        logger.info(f"File: {file_path} created")
+        logger.info(f"content: { content }" )
+        logger.info(f"content.decode: { content_decode }" )
+        logger.info(f"size: { file_size }" )
+        logger.info(f"checksum: {hashlib.md5(content_encode).hexdigest()} " )
+
+        # store to raid ( /var/raid/block-0 )
+        block_size=len(content_decode) // settings.NUM_DISKS
+        logger.info(f"block_size: { block_size }" )
+
+        last_pos=0
+        cur_pos=0
+        for i in range(settings.NUM_DISKS):
+            file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-{i}"
+            if i == 0:
+                cur_pos=last_pos+block_size+1
+            else:
+                cur_pos=last_pos+block_size
+            with open(file_path, 'wb') as f:
+                logger.info(f"write to {file_path}")
+                logger.info(f"file content: {content_decode[last_pos,cur_pos]}")
+                f.write(content_decode[content_decode[last_pos,cur_pos]])
+                f.close()
+            last_pos=cur_pos
+        
+            
+        # response
         return schemas.File(
-            name="m3ow.txt",
-            size=123,
-            checksum=hashlib.md5(content.encode()).hexdigest(),
-            content=base64.b64decode(content.encode()),
+            name=file.filename,
+            size=file_size,
+            checksum=hashlib.md5(content_encode).hexdigest(),
+            content=base64.b64encode( bytes(content_decode, 'utf-8') ),
             content_type="text/plain",
         )
 
     async def retrieve_file(self, filename: str) -> bytes:
         # TODO: retrieve the binary data of file
 
-        return b"".join("m3ow".encode() for _ in range(100))
+        file_path = Path(settings.UPLOAD_PATH) / filename
+        print(file_path)
+        with open(file_path, 'rb') as file:
+            binary_data = file.read()
+
+        return binary_data
 
     async def update_file(self, file: UploadFile) -> schemas.File:
         # TODO: update file's data block and parity block and return it's schema
 
-        content = "何?!"
-        return schemas.File(
-            name="m3ow.txt",
-            size=123,
-            checksum=hashlib.md5(content.encode()).hexdigest(),
-            content=base64.b64decode(content.encode()),
-            content_type="text/plain",
+        file_content = await file.read()
+
+        # Update file's data block and parity block (implement your logic here)
+        # ...
+
+        # Generate checksum
+        checksum = hashlib.md5(file_content).hexdigest()
+
+        # Prepare the response
+        response = schemas.File(
+            name=file.filename,
+            size=len(file_content),
+            checksum=checksum,
+            content=base64.b64encode(file_content),
+            content_type=file.content_type,
         )
+
+        # Save the updated content to the file on disk
+        file_path = Path(settings.UPLOAD_PATH) / file.filename
+        with open( file_path, 'wb') as f:
+            f.write(file_content)
+
+        return response
 
     async def delete_file(self, filename: str) -> None:
         # TODO: delete file's data block and parity block
-        pass
+
+        file_path = Path(settings.UPLOAD_PATH) / filename
+        file_path.unlink()
 
     async def fix_block(self, block_id: int) -> None:
         # TODO: fix the broke block by using rest of block
+
         pass
 
 
