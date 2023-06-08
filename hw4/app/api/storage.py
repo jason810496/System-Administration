@@ -88,15 +88,21 @@ class Storage:
 
         last_pos=0
         cur_pos=block_size+1
+        first_block_size=block_size+1
         for i in range(raid_block_cnt):
             file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-{i}" / file.filename
             
             logger.info(f"last_pos: {last_pos}, cur_pos: {cur_pos}")
             with open(file_path, 'wb') as f:
+                # add padding
+                logger.info(f"padding: {first_block_size-cur_pos+last_pos}")
+                padding=first_block_size-cur_pos+last_pos
+                final_content=content_decode[last_pos:cur_pos]+padding * '\0'
+                final_content_encode=final_content.encode(encoding='utf-8')
                 logger.info(f"file_path: {file_path}")
                 logger.info(f"file content: { content_decode[last_pos:cur_pos] }")
-                logger.info(f"file encode: { content_decode[last_pos:cur_pos].encode(encoding='utf-8') }")
-                f.write( content_decode[last_pos:cur_pos].encode(encoding='utf-8') )
+                logger.info(f"file encode: { final_content }")
+                f.write( final_content_encode )
                 f.close()
             last_pos=cur_pos
             cur_pos=last_pos+block_size
