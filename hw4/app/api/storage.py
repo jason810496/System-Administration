@@ -46,20 +46,21 @@ class Storage:
     async def create_file(self, file: UploadFile) -> schemas.File:
         # TODO: create file with data block and parity block and return it's schema
         
-        file_path = Path(settings.UPLOAD_PATH) / file.filename
-        content = ""
-        with open(file_path, 'wb') as f:
-            content = await file.read()
-            f.write(content)
-            f.close()
+        file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-0" / file.filename 
+        content = await file.read()
+        # with open(file_path, 'wb') as f:
+        #     content = await file.read()
+        #     f.write(content)
+        #     f.close()
        
+
         # if file already exist, response 409
-        if file_path.is_file():
-            return HTTPException(status_code=409, detail="File already exist")
+        # if file_path.is_file():
+        #     return HTTPException(status_code=409, detail="File already exist")
         
-        # if file too large, response 413
-        if len(content) > settings.MAX_SIZE:
-            return HTTPException(status_code=413, detail="File too large")
+        # # if file too large, response 413
+        # if len(content) > settings.MAX_SIZE:
+        #     return HTTPException(status_code=413, detail="File too large")
            
         import os # for getsize 
 
@@ -71,28 +72,34 @@ class Storage:
         logger.info(f"check file_path {os.path.isfile(file_path)} ")
         logger.info(f"File: {file_path} created")
         logger.info(f"content: { content }" )
+        logger.info(f"content len : { len(content) }" )
         logger.info(f"content.decode: { content_decode }" )
+        logger.info(f"content.decode len: { len(content_decode) }" )
         logger.info(f"size: { file_size }" )
         logger.info(f"checksum: {hashlib.md5(content_encode).hexdigest()} " )
 
         # store to raid ( /var/raid/block-0 )
-        block_size=len(content_decode) // settings.NUM_DISKS
+        raid_block_cnt=settings.NUM_DISKS-1
+
+        import math
+        block_size=file_size//raid_block_cnt
         logger.info(f"block_size: { block_size }" )
+        logger.info(f"raid block cnt: { (raid_block_cnt) }" )
 
         last_pos=0
-        cur_pos=0
-        for i in range(settings.NUM_DISKS):
-            file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-{i}"
-            if i == 0:
-                cur_pos=last_pos+block_size+1
-            else:
-                cur_pos=last_pos+block_size
+        cur_pos=block_size+1
+        for i in range(raid_block_cnt):
+            file_path = Path(settings.UPLOAD_PATH) / f"{settings.FOLDER_PREFIX}-{i}" / file.filename
+            
+            logger.info(f"last_pos: {last_pos}, cur_pos: {cur_pos}")
             with open(file_path, 'wb') as f:
-                logger.info(f"write to {file_path}")
-                logger.info(f"file content: {content_decode[last_pos,cur_pos]}")
-                f.write(content_decode[content_decode[last_pos,cur_pos]])
+                logger.info(f"file_path: {file_path}")
+                logger.info(f"file content: { content_decode[last_pos:cur_pos] }")
+                logger.info(f"file encode: { content_decode[last_pos:cur_pos].encode(encoding='utf-8') }")
+                f.write( content_decode[last_pos:cur_pos].encode(encoding='utf-8') )
                 f.close()
             last_pos=cur_pos
+            cur_pos=last_pos+block_size
         
             
         # response
