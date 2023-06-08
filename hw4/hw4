@@ -39,6 +39,7 @@ hw4_start()
     for i in $(seq 0 $NUM_DISKS); do
         mkdir -p /var/raid/block-$i
     done
+    rmdir /var/raid/block-$NUM_DISKS
 
     cd /home/Jason/System-Administration/hw4/app
     . venv/bin/activate
