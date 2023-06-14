@@ -6,6 +6,15 @@ Tips :
 4. finish `nginx` and `ssl`
 5. finish the rest of `api`
 
+My tools : 
+- `rsync` : remote sync 
+    ```
+    rsync -r hw4 FreeBSD:/home/Jason/System-Administration/ --exclude=venv
+    ```
+- `syncToFreeBSD.sh` : 
+    - prerequisite : `brew install watch`
+    - auto sync `hw4` directory while deveplopment folder change !
+
 ## Prerequisite
 - Wireguard connection 
     - `wg-quick up judge`
@@ -99,7 +108,7 @@ sudo ps u
     - the `stop` function `kill` all `pid` related to web app . 
 
 ### Certification
-- Download `sacertbot` from judge server and use the `sacertbot` to download your CA certificate and CA key.
+- Download `sacertbot` from judge yourwebcrt and use the `sacertbot` to download your CA certificate and CA key.
     ```bash
     scp ~/Downloads/sacertbot.txt FreeBSD:~/sacertbot.sh
     sudo pkg install wget zip
@@ -111,90 +120,52 @@ sudo ps u
     uzip ca.zip
     ls # `ca.crt` `ca.key` should be in current directory
     ```
-<!-- - Generate a private key and CSR for the web certificate:
-```
-openssl req -new -newkey rsa:2048 -nodes -keyout web.key -out web.csr
-```
-The command is interative , replace `STUDENT_ID` with your own student id .
-```
-writing new private key to 'web.key'
------
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [AU]:TW
-State or Province Name (full name) [Some-State]:
-Locality Name (eg, city) []:
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:
-Organizational Unit Name (eg, section) []:
-Common Name (e.g. server FQDN or YOUR name) []:STUDENT_ID
-Email Address []:
+- Create our own CSR (Certificate Signing Request) and specifies the subject of the certificate to be included in the CSR : 
+    ```bash
+    openssl req -new -key ca.key -out yourwebcrt.csr -subj "/C=TW/ST=TW/L=TAINAN/O=NCKU/CN=jasonisbigcow.sa" -addext "subjectAltName=DNS:jasonisbigcow.sa"
+    ```
+Options used:
+- `-new`: Generates a new CSR.
+- `-key ca.key`: Specifies the private key file (`ca.key`) to be used for generating the CSR.
+- `-out yourwebcrt.csr`: Specifies the output file (yourwebcrt.csr) where the generated CSR will be saved.
+- `/C`: Country (TW for Taiwan in this case)
+- `/ST`: State (TW for Taiwan in this case)
+- `/L`: Location or city (TAINAN in this case)
+- `/O`: Organization (NCKU in this case)
+- `/CN`: Common Name (`jasonisbigcow.sa` in this case)
 
-Please enter the following 'extra' attributes
-to be sent with your certificate request
-A challenge password []:
-An optional company name []:
-``` -->
-<!-- - Create a configuration file (e.g., `openssl.cnf`) with the following content:
-    - Replace `STUDENT_ID` with the common name you want for your web certificate ( `student_id` ), and `example.com` with your domain name ( `xxx.sa` ).
+Create an `openssl.conf` configuration file .
 ```
-[req]
-distinguished_name = req_distinguished_name
-req_extensions = v3_req
-prompt = no
+[req] req_extensions = v3_req
+ distinguished_name = req_distinguished_name
+ [req_distinguished_name]
+countryName = TW
+ stateOrProvinceName = TW
+ localityName = TAINAN
+ organizationName = NCKU
+ commonName = jasonisbigcow.sa
+ [v3_req] 
+ subjectAltName = DNS:jasonisbigcow.sa
+```
 
-[req_distinguished_name]
-CN = STUDENT_ID
+Sign Certificate Signing Request (CSR) and generate a certificate.
+```
+openssl x509 -req -in yourwebcrt.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out yourwebcrt.crt -days 365 -extfile openssl.cnf -extensions v3_req
+```
 
-[v3_req]
-basicConstraints = CA:FALSE
-keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-subjectAltName = @alt_names
+Chained our certificate with `ca.crt`
+```
+cat yourwebcrt.crt ca.crt > chained.crt
+```
 
-[alt_names]
-DNS.1 = jasonbigcow.sa
+Update `Nginx` configuration : located at `/usr/local/etc/nginx/nginx.conf` :
+```bash
+#....
+    ssl_certificate /home/Jason/chained.crt;                                
+    ssl_certificate_key /home/Jason/ca.key;
+#....
 ```
-- Generate a certificate request:
-```
-openssl req -new -key ca.key -out web.req
-```
-- Sign the web certificate using the CA certificate and private key:
-```
-openssl x509 -req -days 365 -sha256 -extfile openssl.cnf -signkey ca.key -in web.req -out web.crt
-```
-- Sign root CA:
-```
-openssl x509 -req -days 365 -sha256 -extfile openssl.cnf -signkey ca.key -in web.req -out web.crt
-``` -->
 
-<!-- - Sign the web certificate using the CA certificate and private key:
-```
-openssl x509 -req -in web.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out web.crt -days 365 -extensions v3_req -extfile openssl.cnf
-```
-The result of signing certificate : 
-```
-Signature ok
-subject=C = TW, ST = Some-State, O = Internet Widgits Pty Ltd, CN = F74116720
-Getting CA Private Key
-``` -->
-
-- Generate our own certificate.
-```
-openssl req -new -newkey rsa:2048 -nodes -keyout web.key -out web.csr
-```
-- Concatenate the certificate chain files:
-```
-cat web.crt ca.crt rootca.crt > web_chained.crt
-```
-- Sign the certificate chain using the root CA and intermediate CA:
-```
-openssl ca -config openssl.cnf -in web_chained.crt -cert ca.crt -keyfile ca.key -out web_chained_signed.crt
-```
-- Now we can use `web_chained_signed.crt` and `web.key`
 
 ### Nginx Configuration
 - Install `nginx` package using pkg.
@@ -222,9 +193,32 @@ openssl ca -config openssl.cnf -in web_chained.crt -cert ca.crt -keyfile ca.key 
     ```
 - Test `Nginx` Configuration
     - http
+    - `curl https://jasonisbigcow.sa/api/health --insecure`
     - `curl username.sa`
-
+    ```
+    python3 -c "import requests;print(requests.get('https://jasonisbigcow.sa').text)" echo | openssl s_client -connect jasonisbigcow.sa:443 2>&1 1>/dev/null
+    ```
 
 ## Web interface
+- `api/health`
+in `app/api/endpoints/health.py` line 17 , replace `"/"` to `""`
+```python
+@router.get(
+    "/",   # <--- here
+    status_code=status.HTTP_200_OK,
+    responses=GET_HEALTH,
+    response_model=schemas.Msg,
+    name="health:get_health",
+)
+```
+
+- create raid : 
+check command : 
+```
+xxd /var/raid/block-0/m3ow.txt
+xxd /var/raid/block-1/m3ow.txt
+xxd /var/raid/block-2/m3ow.txt
+xxd /var/raid/block-4/m3ow.txt
+```
 
 
