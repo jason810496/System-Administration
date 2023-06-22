@@ -1,5 +1,8 @@
 from pydantic import BaseSettings
+import os 
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Settings(BaseSettings):
     class Config:
@@ -16,10 +19,10 @@ class Settings(BaseSettings):
     APP_PREFIX: str = "/api"
 
     """File storage configuration"""
-    UPLOAD_PATH: str = "/tmp"
+    UPLOAD_PATH: str = "/var/raid"
     FOLDER_PREFIX: str = "block"
-    NUM_DISKS: int = 5
-    MAX_SIZE: int = 1024 * 1024 * 100  # 100MB
+    NUM_DISKS: int = os.getenv("NUM_DISKS") # 4
+    MAX_SIZE: int = os.getenv("MAX_SIZE")  # 1024 * 1024 * 100  # 100MB
 
 
 settings = Settings()

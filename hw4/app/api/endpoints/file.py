@@ -1,6 +1,7 @@
 import schemas
 from fastapi import APIRouter, Response, UploadFile, status
 from storage import storage
+from typing import Any
 
 router = APIRouter()
 
@@ -11,7 +12,7 @@ router = APIRouter()
     response_model=schemas.File,
     name="file:create_file",
 )
-async def create_file(file: UploadFile) -> schemas.File:
+async def create_file(file: UploadFile) -> Any :
     return await storage.create_file(file)
 
 

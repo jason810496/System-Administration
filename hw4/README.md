@@ -1,12 +1,12 @@
 # Writeup
-Tips : 
+**Tips** : 
 1. finish `health` api
 2. check `localhost` 
 3. finish `rc.d` and add your service
 4. finish `nginx` and `ssl`
 5. finish the rest of `api`
 
-My tools : 
+**My tools** : 
 - `rsync` : remote sync 
     ```
     rsync -r hw4 FreeBSD:/home/Jason/System-Administration/ --exclude=venv
@@ -28,6 +28,7 @@ My tools :
 > 
 > Since `venv` could also manage pip , so I use second method .
 1. use `poetry` as pip manager : 
+    - **must install `Rust` language first !!!**
     - clone web application template
     - install `poetry`
     ```bash
@@ -220,5 +221,8 @@ xxd /var/raid/block-1/m3ow.txt
 xxd /var/raid/block-2/m3ow.txt
 xxd /var/raid/block-4/m3ow.txt
 ```
+
+## common location & commands
+
 
 
