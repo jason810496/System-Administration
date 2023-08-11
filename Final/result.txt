@@ -1,0 +1,161 @@
+{
+    "score": 74,
+    "results": {
+        "General": [
+            {
+                "message": "SSH port is correct and the judge user allows login with the provided key.",
+                "ans": true,
+                "weight": "5"
+            },
+            {
+                "message": "Set the judge user to use the sudo command password-less.",
+                "ans": true,
+                "weight": "5"
+            },
+            {
+                "message": "Set judge user's password.",
+                "ans": true,
+                "weight": "5"
+            },
+            {
+                "message": "Change the hostname",
+                "ans": true,
+                "weight": "2"
+            },
+            {
+                "message": "Set the correct time zone.",
+                "ans": true,
+                "weight": "2"
+            },
+            {
+                "message": "Set judge user's default shell to bash.",
+                "ans": true,
+                "weight": "2"
+            },
+            {
+                "message": "SSH key authentication only.",
+                "ans": false,
+                "weight": "2"
+            },
+            {
+                "message": "Deny root login from SSH.",
+                "ans": true,
+                "weight": "2"
+            }
+        ],
+        "ShellScript": [
+            {
+                "message": "All users' usernames are correct.",
+                "ans": true,
+                "weight": "4"
+            },
+            {
+                "message": "All users' passwords are correct.",
+                "ans": true,
+                "weight": "2"
+            },
+            {
+                "message": "All users' shells are correct.",
+                "ans": true,
+                "weight": "4"
+            }
+        ],
+        "ZFS": [
+            {
+                "message": "Health check",
+                "ans": true,
+                "weight": "5"
+            },
+            {
+                "message": "Check the flag file is correct",
+                "ans": false,
+                "weight": "5"
+            }
+        ],
+        "WebClient": [
+            {
+                "message": "Access the website with sa-judge.meow.",
+                "ans": true,
+                "weight": "5"
+            }
+        ],
+        "WebServer": [
+            {
+                "message": "Web server is configured without errors.",
+                "ans": true,
+                "weight": "8"
+            },
+            {
+                "message": "Setup HTTPS redirection rules.",
+                "ans": true,
+                "weight": "2"
+            },
+            {
+                "message": "Check HTTPS is valid and the Intermediate certificate’s CN is your username.",
+                "ans": true,
+                "weight": "5"
+            },
+            {
+                "message": "Setup the load balance server.",
+                "ans": true,
+                "weight": "5"
+            }
+        ],
+        "MaliciousProcess": [
+            {
+                "message": "Malicious processes are killed.",
+                "ans": true,
+                "weight": "3"
+            },
+            {
+                "message": "Malicious processes wont start on boot.",
+                "ans": true,
+                "weight": "2"
+            }
+        ],
+        "Firewall": [
+            {
+                "message": "Allow all loopback and outgoing traffic.",
+                "ans": true,
+                "weight": "3"
+            },
+            {
+                "message": "Only allow incoming traffic access to the ICMP, SSH, NFS and Web.",
+                "ans": false,
+                "weight": "3"
+            },
+            {
+                "message": "Allow 10.187.0.0/23 and 10.187.112.0/20 to access your ssh service.",
+                "ans": false,
+                "weight": "3"
+            },
+            {
+                "message": "Allow 10.187.0.0/23 to access your nfs service.",
+                "ans": false,
+                "weight": "3"
+            },
+            {
+                "message": "prevent access from IPs 10.187.10.5 and 10.187.0.253 to all of your web hosts.",
+                "ans": true,
+                "weight": "3"
+            }
+        ],
+        "NFSServer": [
+            {
+                "message": "Check the flag is correct.",
+                "ans": false,
+                "weight": "6"
+            },
+            {
+                "message": "Allow read/write permissions to 10.187.1.0/24.",
+                "ans": false,
+                "weight": "2"
+            },
+            {
+                "message": "Allow read permission to all IPs.",
+                "ans": false,
+                "weight": "2"
+            }
+        ]
+    }
+}

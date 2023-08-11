@@ -1,0 +1,52 @@
+# BEGIN General/0
+ 
+# END General/0
+# BEGIN General/1
+ 
+# END General/1
+# BEGIN General/2
+ 
+# END General/2
+# BEGIN General/3
+ 
+# END General/3
+# BEGIN WebInterface/1
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1015: InsecureRequestWarning: Unverified HTTPS request is being made to host 'jasonisbigcow.sa'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+  warnings.warn(
+# END WebInterface/1
+# BEGIN WebInterface/2
+ 
+# END WebInterface/2
+# BEGIN WebInterface/3
+ 
+# END WebInterface/3
+# BEGIN WebInterface/4
+ 
+# END WebInterface/4
+# BEGIN WebInterface/5
+ 
+# END WebInterface/5
+# BEGIN WebInterface/6
+ 
+# END WebInterface/6
+# BEGIN WebInterface/7
+ 
+# END WebInterface/7
+# BEGIN WebInterface/8
+ 
+# END WebInterface/8
+# BEGIN WebInterface/9
+ 
+# END WebInterface/9
+# BEGIN WebInterface/10
+ 
+# END WebInterface/10
+# BEGIN WebInterface/11
+ 
+# END WebInterface/11
+# BEGIN WebInterface/12
+ 
+# END WebInterface/12
+# BEGIN WebInterface/13
+ 
+# END WebInterface/13

@@ -1,0 +1,1 @@
+/data/shared  -alldirs  -maproot=root -network 192.168.0.0 -mask 255.255.255.0

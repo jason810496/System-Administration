@@ -1,0 +1,71 @@
+# BEGIN WebInterface/0
+check = True
+# END WebInterface/0
+# BEGIN General/0
+[{'NUM_DISKS': '3', 'DIR_COUNT': '0'}, {'NUM_DISKS': '10', 'DIR_COUNT': '10'}]
+# END General/0
+# BEGIN General/1
+{'redirected': False, 'url': 'http://jasonisbigcow.sa', 'status': 502, 'server': 'nginx/1.22.1', 'date': 'Thu, 08 Jun 2023 07:45:35 GMT', 'content_type': 'text/html', 'content_length': '157', 'connection': 'close', 'elapsed': 0, 'changed': False, 'failed': True, 'msg': 'Status code was 502 and not [200]: HTTP Error 502: Bad Gateway'}
+# END General/1
+# BEGIN General/2
+https://jasonisbigcow.sa/
+# END General/2
+# BEGIN General/3
+<html>
+<head><title>502 Bad Gateway</title></head>
+<body>
+<center><h1>502 Bad Gateway</h1></center>
+<hr><center>nginx/1.22.1</center>
+</body>
+</html>
+
+depth=2 CN = saroot
+verify return:1
+depth=1 C = TW, ST = TW, L = TAINAN, O = NCKU, CN = jasonisbigcow
+verify return:1
+depth=0 C = TW, ST = TW, L = TAINAN, O = NCKU, CN = jasonisbigcow.sa
+verify return:1
+DONE
+# END General/3
+# BEGIN WebInterface/1
+result status code: 502
+ans status code: 200
+result content-type: text/html
+ans content-type: application/json
+# END WebInterface/1
+# BEGIN WebInterface/2
+ 
+# END WebInterface/2
+# BEGIN WebInterface/3
+ 
+# END WebInterface/3
+# BEGIN WebInterface/4
+ 
+# END WebInterface/4
+# BEGIN WebInterface/5
+ 
+# END WebInterface/5
+# BEGIN WebInterface/6
+ 
+# END WebInterface/6
+# BEGIN WebInterface/7
+ 
+# END WebInterface/7
+# BEGIN WebInterface/8
+ 
+# END WebInterface/8
+# BEGIN WebInterface/9
+ 
+# END WebInterface/9
+# BEGIN WebInterface/10
+ 
+# END WebInterface/10
+# BEGIN WebInterface/11
+ 
+# END WebInterface/11
+# BEGIN WebInterface/12
+ 
+# END WebInterface/12
+# BEGIN WebInterface/13
+ 
+# END WebInterface/13

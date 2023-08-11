@@ -1,0 +1,99 @@
+{
+    "score": 35,
+    "results": {
+        "General": [
+            {
+                "message": "Check all mock disks folder",
+                "ans": false,
+                "weight": "5"
+            },
+            {
+                "message": "Nginx host is configured.",
+                "ans": true,
+                "weight": "10"
+            },
+            {
+                "message": "Https redirection",
+                "ans": true,
+                "weight": "5"
+            },
+            {
+                "message": "Check https is valid and Intermediate certifcate CN is your student id",
+                "ans": true,
+                "weight": "10"
+            }
+        ],
+        "WebInterface": [
+            {
+                "message": "service hw4 start, service hw4 restart and service hw4 stop can actually control your service and provide sysrc <variables name>=<number> command to control your service environment variables",
+                "ans": true,
+                "weight": "10"
+            },
+            {
+                "message": "[ GET /api/health ] 200 response correct",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ POST /api/file ] 201 response correct",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ POST /api/file ] 409 response correct. No file uploaded successfully",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ POST /api/file ] 413 response correct. No file uploaded successfully",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ GET /api/file ] 200 response correct. The file was downloaded successfully with the correct filename, and the checksum matches.",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ GET /api/file ] 404 response correct",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ PUT /api/file ] 200 response correct. Data updated successfully",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ PUT /api/file ] 404 response correct. No data is updated",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ PUT /api/file ] 413 response correct. No data is updated",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ DELETE /api/file ] 200 response correct. All data and parity belonging to the file should be removed",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ DELETE /api/file ] 404 response correct. No data is deleteed",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "[ POST /api/file ] 200 response correct. Corrupted data blocks should be repaired.",
+                "ans": false,
+                "weight": "4"
+            },
+            {
+                "message": "Random 50 testcase",
+                "ans": false,
+                "weight": "12"
+            }
+        ]
+    }
+}

@@ -1,0 +1,108 @@
+# BEGIN General/0
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that
+the implicit localhost does not match 'all'
+[WARNING]: Platform freebsd on host 10.187.16.54 is using the discovered Python
+interpreter at /usr/local/bin/python3.9, but future installation of another
+Python interpreter could change the meaning of that path. See https://docs.ansi
+ble.com/ansible/2.10/reference_appendices/interpreter_discovery.html for more
+information.
+# END General/0
+# BEGIN General/1
+ 
+# END General/1
+# BEGIN General/2
+ 
+# END General/2
+# BEGIN General/3
+ 
+# END General/3
+# BEGIN General/4
+ 
+# END General/4
+# BEGIN General/5
+ 
+# END General/5
+# BEGIN General/6
+Warning: Permanently added '[10.187.16.54]:2222' (ECDSA) to the list of known hosts.
+# END General/6
+# BEGIN General/7
+Warning: Permanently added '[10.187.16.54]:2222' (ECDSA) to the list of known hosts.
+root@10.187.16.54: Permission denied (publickey,keyboard-interactive).
+# END General/7
+# BEGIN ShellScript/0
+Shared connection to 10.187.16.54 closed.
+# END ShellScript/0
+# BEGIN ShellScript/1
+Shared connection to 10.187.16.54 closed.
+# END ShellScript/1
+# BEGIN ShellScript/2
+Shared connection to 10.187.16.54 closed.
+# END ShellScript/2
+# BEGIN ZFS/0
+ 
+# END ZFS/0
+# BEGIN ZFS/1
+read flag failed
+# END ZFS/1
+# BEGIN WebClient/0
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100     5  100     5    0     0     96      0 --:--:-- --:--:-- --:--:--    98
+# END WebClient/0
+# BEGIN WebServer/0
+ 
+# END WebServer/0
+# BEGIN WebServer/1
+ 
+# END WebServer/1
+# BEGIN WebServer/2
+ 
+# END WebServer/2
+# BEGIN WebServer/3
+ 
+# END WebServer/3
+# BEGIN MaliciousProcess/0
+ 
+# END MaliciousProcess/0
+# BEGIN MaliciousProcess/1
+ 
+# END MaliciousProcess/1
+# BEGIN Firewall/0
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100     5  100     5    0     0    107      0 --:--:-- --:--:-- --:--:--   108
+# END Firewall/0
+# BEGIN Firewall/1
+
+# END Firewall/1
+# BEGIN Firewall/2
+ 
+# END Firewall/2
+# BEGIN NFSServer/0
+Traceback (most recent call last):
+  File "/tmp/e7987b28-22d9-482f-9259-d686cecd4d0f/NFSServer/readflag.py", line 13, in <module>
+    f = nfs.open('flag', 'r')
+  File "/usr/local/lib/python3.9/dist-packages/libnfs/__init__.py", line 187, in open
+    return NFSFH(self._nfs, path, mode=mode, codec=codec)
+  File "/usr/local/lib/python3.9/dist-packages/libnfs/__init__.py", line 81, in __init__
+    raise ValueError(_errmsg)
+ValueError: open failed: Input/output error
+# END NFSServer/0
+# BEGIN Firewall/3
+ 
+# END Firewall/3
+# BEGIN Firewall/4
+ 
+# END Firewall/4
+# BEGIN NFSServer/1
+ 
+# END NFSServer/1
+# BEGIN NFSServer/2
+ 
+# END NFSServer/2
